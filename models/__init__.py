@@ -19,7 +19,7 @@ engine = create_async_engine(
     #连接池空闲时间
     pool_timeout = 10,
     #连接池回收时间(默认是-1, 代表永不回收)
-    pool_recyccle=3600,
+    pool_recycle=3600,
     #连接前是否检查
     pool_pre_ping=True,
 )
@@ -57,5 +57,5 @@ class Base(DeclarativeBase):
        "pk": "pk_%(table_name)s"
 })
 
-
+from .import user
 

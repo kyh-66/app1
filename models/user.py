@@ -36,10 +36,10 @@ class User(Base):
 
 
     #邮箱
-    class EmailCode(Base):
-        __tablename__ = "email_code"
-        id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-        email: Mapped[str] = mapped_column(String(100))
-        code: Mapped[str] = mapped_column(String(10))
-        #创建时间
-        created_time: Mapped[datetime] = mapped_column(DateTime)
+class EmailCode(Base):
+    __tablename__ = "email_code"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    email: Mapped[str] = mapped_column(String(100))
+    code: Mapped[str] = mapped_column(String(10))
+    #创建时间
+    created_time: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)

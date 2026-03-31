@@ -9,3 +9,21 @@ GET http://127.0.0.1:8000/hello/User
 Accept: application/json
 
 ###
+GET http://127.0.0.1:8000/mail/test?email=3493598861@qq.com
+
+###
+GET http://127.0.0.1:8000/auth/code?email=3493598861@qq.com
+
+
+###
+POST http://127.0.0.1:8000/auth/register
+Content-Type: application/json
+
+{
+  "email": "3493598861@qq.com",
+  "username": "hynever",
+  "password": "123456",
+  "confirm_password": "123456",
+  "code":"3080"
+
+}
