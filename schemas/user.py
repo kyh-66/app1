@@ -24,3 +24,16 @@ class UserCreateSchema(BaseModel):
     email: EmailStr
     username: UsernameStr
     password: PasswordStr
+
+class LoginIn(BaseModel):
+    email: EmailStr
+    password: PasswordStr
+
+class UserSchema(BaseModel):
+    id: Annotated[int, Field(...)]
+    email: EmailStr
+    username: UsernameStr
+
+class LoginOut(BaseModel):
+    user: UserSchema
+    token: str

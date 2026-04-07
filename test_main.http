@@ -27,3 +27,11 @@ Content-Type: application/json
   "code":"3080"
 
 }
+###
+POST http://127.0.0.1:8000/auth/login
+Content-Type: application/json
+
+{
+  "email": "3493598861@qq.com",
+  "password": "123456"
+}

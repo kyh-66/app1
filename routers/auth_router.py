@@ -6,15 +6,19 @@ from fastapi_mail import FastMail, MessageSchema, MessageType
 from models import AsyncSession
 import string
 import random
+from models.user import User
 from aiosmtplib import SMTPResponseException
 from fastapi import Depends
 from repository.user_repo import EmailCodeRepository, UserRepository
 from schemas import ResponseOut
-from schemas.user import RegisterIn, UserCreateSchema
+from schemas.user import RegisterIn, UserCreateSchema,LoginIn, LoginOut
+from core.auth import AuthHandler
 
 
 
 router = APIRouter(prefix = "/auth", tags = ["user"])
+
+auth_handler = AuthHandler()
 
 @router.get("/code", response_model=ResponseOut)
 async def get_email_code(
@@ -64,6 +68,27 @@ async def register(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     return ResponseOut()
+
+@router.post("/login", response_model=LoginOut)
+async def login(
+    data: LoginIn,
+    session: AsyncSession = Depends(get_session)
+):
+    #创建user_repo对象
+    user_repo = UserRepository(session=session)
+    #根据邮箱查找用户
+    user: User|None = await user_repo.get_by_email(str(data.email))
+    if not user:
+        raise HTTPException(status_code=400, detail="用户不存在")
+    if not user.check_password(data.password):
+        raise HTTPException(status_code=400, detail="密码错误")
+    #生成token
+    tokens = auth_handler.encode_login_token(user.id)
+    return {
+        "user": user,
+        "token": tokens['access_token']
+    }
+
 
 
 
