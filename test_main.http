@@ -35,3 +35,14 @@ Content-Type: application/json
   "email": "3493598861@qq.com",
   "password": "123456"
 }
+
+###
+POST http://127.0.0.1:8000/name
+Content-Type: application/json
+
+{
+  "surname": "王",
+  "length": "两字",
+  "gender": "男",
+  "other": "大气"
+}

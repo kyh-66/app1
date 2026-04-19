@@ -69,20 +69,20 @@ class AuthHandler(metaclass=SingletonMeta):
         except jwt.InvalidTokenError as e:
             raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="Assess token不可用")
 
-        def decode_refresh_token(self, token):
+    def decode_refresh_token(self, token):
             #REFRESH TOKEN: 不可用, 都用401
-            try:
-                payload = jwt.decode(token, self.secret, algorithms=['HS256'])
-                if payload['sub'] != int(TokenTypeEnum.REFRESH_TOKEN.value):
-                   raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Token类型错误")
-                return payload['iss']
-            except jwt.ExpiredSignatureError:
-                raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Refresh token过期")
-            except jwt.InvalidTokenError as e:
-                raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Refresh token不可用")
-        def auth_access_dependency(self, auth: HTTPAuthorizationCredentials = Security(security)):
-            return self.decode_access_token(auth.credentials)
+        try:
+            payload = jwt.decode(token, self.secret, algorithms=['HS256'])
+            if payload['sub'] != int(TokenTypeEnum.REFRESH_TOKEN.value):
+                raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Token类型错误")
+            return payload['iss']
+        except jwt.ExpiredSignatureError:
+            raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Refresh token过期")
+        except jwt.InvalidTokenError as e:
+            raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Refresh token不可用")
+    def auth_access_dependency(self, auth: HTTPAuthorizationCredentials = Security(security)):
+        return self.decode_access_token(auth.credentials)
 
-        def auth_refresh_dependency(self, auth: HTTPAuthorizationCredentials = Security(security)):
-            return self.decode_refresh_token(auth.credentials)
+    def auth_refresh_dependency(self, auth: HTTPAuthorizationCredentials = Security(security)):
+        return self.decode_refresh_token(auth.credentials)
 
